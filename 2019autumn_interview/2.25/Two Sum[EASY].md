@@ -1,0 +1,62 @@
+### Two Sum[EASY]
+
+Given an array of integers, return **indices** of the two numbers such that they add up to a specific target.
+
+You may assume that each input would have **exactly** one solution, and you may not use the *same* element twice.
+
+**Example:**
+
+```
+Given nums = [2, 7, 11, 15], target = 9,
+
+Because nums[0] + nums[1] = 2 + 7 = 9,
+return [0, 1].
+```
+
+**思路:**
+
+对于这个问题最简单的思路是二重循环，复杂度为O(N^2)，效率很低，因为同样的组合会多次寻找。因此要减少寻找的次数。最少的次数是只遍历整个数组一次。
+
+* 第一种遍历的方式为**排序**后两个指针分别从头尾遍历，大了尾指针移动，小了头指针移动，因此最后的**复杂度**为**排序的复杂度**。
+
+    > python list.sort()用的是什么排序啊？
+    >
+
+```python
+class Solution:
+    def twoSum(self, nums: List[int], target:int) -> List[int]:
+        index = []
+        numtosort = nums[:]
+        numtosort.sort()
+        i = 0 # head
+        j = len(numtosort) - 1 # tail
+        while i < j:
+            if numsort[i] + numsort[j] == target:
+                for k in range(len(nums)):
+                    if nums[k] == numsort[i]:
+                        index.append(k)
+                        break
+                 for k in range(len(nums)):
+                    if nums[k] == numsort[j]:
+                        index.append(k)
+                        break
+             elif numsort[i] + numsort[j] > target:
+                j -= 1
+             else:
+                i += 1
+         return index
+```
+
+* 第二种方式的思想为空间换时间，使用`Hash`进行存储，那么键值对应为x-i，存起来已经遍历过的数字及位置信息，以便后面遍历时继续使用：
+
+```python
+class Solution:
+    def twoSum(self, nums: List[int], target:int) -> List[int]:
+        dict = {}
+        for i, num in enumerate(nums):
+            if target - num in dict:
+                # 需要先检测，再保存，因为4+4=8的话， 如果直接保存4，那么将直接返回自己
+                return(dict[target - num], i)
+            dict[num] = i
+```
+
